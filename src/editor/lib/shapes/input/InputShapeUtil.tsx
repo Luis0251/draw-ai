@@ -1,14 +1,16 @@
 import { TlInputProps, TlInputShape } from "@/editor/schema/TlInput";
 import { cn } from "@/lib/utils";
-import { Lock, LockOpen } from "lucide-react";
+import { Lock, LockOpen, Play } from "lucide-react";
 import {
   Geometry2d,
   HTMLContainer,
   RecordProps,
   Rectangle2d,
+  resizeBox,
   ShapeUtil,
   T,
   TldrawUiButton,
+  TLResizeInfo,
 } from "tldraw";
 
 export class InputShapeUtil extends ShapeUtil<TlInputShape> {
@@ -37,6 +39,13 @@ export class InputShapeUtil extends ShapeUtil<TlInputShape> {
   }
   component(shape: TlInputShape) {
     const isLocked = this.editor.getShape(shape.id)?.isLocked;
+    const handleLock = () => {
+      this.editor.updateShape({
+        id: shape.id,
+        isLocked: !shape.isLocked,
+        type: shape.type,
+      });
+    };
 
     return (
       <HTMLContainer
@@ -67,7 +76,7 @@ export class InputShapeUtil extends ShapeUtil<TlInputShape> {
                 e.stopPropagation();
                 e.preventDefault();
               }}
-              onClick={() => console.log("click lock")}
+              onClick={handleLock}
             >
               {isLocked ? (
                 <Lock className="w-4 h-4" />
@@ -83,17 +92,42 @@ export class InputShapeUtil extends ShapeUtil<TlInputShape> {
                 e.stopPropagation();
                 e.preventDefault();
               }}
-              onClick={() => console.log("click lock")}
+              onClick={() => console.log("click play")}
             >
-              {isLocked ? (
-                <Lock className="w-4 h-4" />
-              ) : (
-                <LockOpen className="w-4 h-4" />
-              )}
+              <Play className="w-4 h-4" />
             </TldrawUiButton>
           </div>
         </div>
       </HTMLContainer>
     );
+  }
+  indicator(shape: TlInputShape) {
+    return (
+      <rect
+        width={shape.props.w}
+        height={shape.props.h}
+        rx={4}
+        ry={4}
+        strokeDasharray="8 2"
+        strokeWidth={1.5}
+        stroke="rgba(219,39,119,0.9)"
+        fill="none"
+      />
+    );
+  }
+  override canBind() {
+    return true;
+  }
+  override canEdit() {
+    return true;
+  }
+  override canResize() {
+    return true;
+  }
+  override isAspectRatioLocked() {
+    return false;
+  }
+  override onResize(shape: TlInputShape, info: TLResizeInfo<TlInputShape>) {
+    return resizeBox(shape, info);
   }
 }
