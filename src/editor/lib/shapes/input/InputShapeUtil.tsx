@@ -1,3 +1,4 @@
+import { generateResponse } from "@/app/actions/ai/instructions";
 import { TlInputProps, TlInputShape } from "@/editor/schema/TlInput";
 import { cn } from "@/lib/utils";
 import { Lock, LockOpen, Play } from "lucide-react";
@@ -9,6 +10,8 @@ import {
   resizeBox,
   ShapeUtil,
   T,
+  TLArrowBinding,
+  TLBinding,
   TldrawUiButton,
   TLResizeInfo,
 } from "tldraw";
@@ -44,6 +47,61 @@ export class InputShapeUtil extends ShapeUtil<TlInputShape> {
         id: shape.id,
         isLocked: !shape.isLocked,
         type: shape.type,
+      });
+    };
+
+    const filterTerminals = (
+      bindings: TLBinding[],
+      terminalType: "start" | "end"
+    ): TLArrowBinding[] => {
+      return bindings.filter((binding): binding is TLArrowBinding => {
+        return (
+          binding.props &&
+          "terminal" in binding.props &&
+          binding.props.terminal === terminalType
+        );
+      });
+    };
+
+    const getShapeFromBindigs = (bindings: TLBinding[]): TlInputShape[] => {
+      return bindings.map((binding) => {
+        return this.editor.getShape(binding.toId);
+      }) as TlInputShape[];
+    };
+
+    const handleInstruction = async (shape: TlInputShape) => {
+      const arrowBindings = this.editor.getBindingsInvolvingShape(
+        shape.id,
+        "arrow"
+      );
+      const arrowShapes = arrowBindings.map((b) =>
+        this.editor.getBindingsFromShape(b.fromId, "arrow")
+      );
+      const allArrowBindings = arrowShapes.flat();
+
+      const startTerminals = filterTerminals(allArrowBindings, "start");
+      const endTerminals = filterTerminals(allArrowBindings, "end");
+
+      const startShapes = getShapeFromBindigs(startTerminals);
+      const endShapes = getShapeFromBindigs(endTerminals);
+
+      if (startShapes.length === 0 || endShapes.length === 0) return;
+
+      const shapeInfo = startShapes.map((shape) => ({
+        type: shape.type,
+        text: shape.props.text,
+      }));
+
+      const response = await generateResponse(shapeInfo);
+
+      endShapes.forEach((endShape) => {
+        this.editor.updateShape({
+          id: endShape.id,
+          type: endShape.type,
+          props: {
+            text: response,
+          },
+        });
       });
     };
 
