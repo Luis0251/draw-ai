@@ -94,17 +94,15 @@ export class InputShapeUtil extends ShapeUtil<TlInputShape> {
 
       const response = await generateResponse(shapeInfo);
 
-      console.log(response);
-
-      // endShapes.forEach((endShape) => {
-      //   this.editor.updateShape({
-      //     id: endShape.id,
-      //     type: endShape.type,
-      //     props: {
-      //       text: response,
-      //     },
-      //   });
-      // });
+      endShapes.forEach((endShape) => {
+        this.editor.updateShape({
+          id: endShape.id,
+          type: endShape.type,
+          props: {
+            text: response,
+          },
+        });
+      });
     };
 
     return (

@@ -2,7 +2,6 @@
 
 import { GoogleGenerativeAI } from "@google/generative-ai";
 
-// Configura el cliente con la versión correcta
 const genAI = new GoogleGenerativeAI(process.env.GOOGLE_API_KEY!);
 
 interface ShapeInfo {
