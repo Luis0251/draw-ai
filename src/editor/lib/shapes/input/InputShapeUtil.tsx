@@ -29,7 +29,7 @@ export class InputShapeUtil extends ShapeUtil<TlInputShape> {
     return {
       w: 300,
       h: 200,
-      text: "",
+      text: "Write a short poem",
       name: "Input",
     };
   }
@@ -94,15 +94,17 @@ export class InputShapeUtil extends ShapeUtil<TlInputShape> {
 
       const response = await generateResponse(shapeInfo);
 
-      endShapes.forEach((endShape) => {
-        this.editor.updateShape({
-          id: endShape.id,
-          type: endShape.type,
-          props: {
-            text: response,
-          },
-        });
-      });
+      console.log(response);
+
+      // endShapes.forEach((endShape) => {
+      //   this.editor.updateShape({
+      //     id: endShape.id,
+      //     type: endShape.type,
+      //     props: {
+      //       text: response,
+      //     },
+      //   });
+      // });
     };
 
     return (
@@ -150,7 +152,7 @@ export class InputShapeUtil extends ShapeUtil<TlInputShape> {
                 e.stopPropagation();
                 e.preventDefault();
               }}
-              onClick={() => console.log("click play")}
+              onClick={() => handleInstruction(shape)}
             >
               <Play className="w-4 h-4" />
             </TldrawUiButton>

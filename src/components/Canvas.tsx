@@ -1,6 +1,6 @@
 "use client";
 import React from "react";
-import { Tldraw, TldrawEditorProps } from "tldraw";
+import { getSnapshot, Tldraw, TldrawEditorProps } from "tldraw";
 import { TldrawContent } from "./TldrawContent";
 import { InputShapeUtil } from "@/editor/lib";
 
@@ -18,6 +18,8 @@ export const Canvas = () => {
       editor.createShape({
         type: "input",
       });
+      const { document } = getSnapshot(editor.store);
+      console.log(document);
     },
   };
   return (
