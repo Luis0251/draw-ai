@@ -30,7 +30,7 @@ export class InputShapeUtil extends ShapeUtil<TlInputShape> {
     return {
       w: 300,
       h: 200,
-      text: "Write a short poem",
+      text: "",
       name: "Input",
     };
   }

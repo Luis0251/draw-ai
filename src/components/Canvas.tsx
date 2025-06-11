@@ -1,25 +1,21 @@
 "use client";
 import React from "react";
-import { getSnapshot, Tldraw, TldrawEditorProps } from "tldraw";
+import { Tldraw, TldrawEditorProps } from "tldraw";
 import { TldrawContent } from "./TldrawContent";
-import { InputShapeUtil } from "@/editor/lib";
+import { InputShapeUtil, InputTool } from "@/editor/lib";
 
 const myCustomShapes = [InputShapeUtil];
+const myCustomTools = [InputTool];
 
 export const Canvas = () => {
   const defaultProps: TldrawEditorProps = {
-    initialState: "select",
+    initialState: "input",
     shapeUtils: myCustomShapes,
-    tools: [],
+    tools: myCustomTools,
     onMount: (editor) => {
       editor.user.updateUserPreferences({
         isSnapMode: true,
       });
-      editor.createShape({
-        type: "input",
-      });
-      const { document } = getSnapshot(editor.store);
-      console.log(document);
     },
   };
   return (
