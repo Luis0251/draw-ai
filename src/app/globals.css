@@ -121,3 +121,20 @@
     @apply bg-background text-foreground;
   }
 }
+
+.ProseMirror p.empty-editor:first-child::before,
+.ProseMirror p.empty-node:first-child::before {
+  content: attr(data-placeholder);
+  float: left;
+  color: #adb5bd;
+  pointer-events: none;
+  height: 0;
+}
+
+.ProseMirror .empty-node::before {
+  content: attr(data-placeholder);
+  float: left;
+  color: #adb5bd;
+  pointer-events: none;
+  height: 0;
+}
