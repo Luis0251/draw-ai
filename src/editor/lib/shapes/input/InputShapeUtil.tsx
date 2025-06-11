@@ -1,4 +1,5 @@
 import { generateResponse } from "@/app/actions/ai/instructions";
+import { TipTap } from "@/components/TipTap";
 import { TlInputProps, TlInputShape } from "@/editor/schema/TlInput";
 import { cn } from "@/lib/utils";
 import { Lock, LockOpen, Play } from "lucide-react";
@@ -105,6 +106,18 @@ export class InputShapeUtil extends ShapeUtil<TlInputShape> {
       });
     };
 
+    const handleContentUpdate = (html: string) => {
+      if (shape.props.text !== html) {
+        this.editor.updateShape({
+          id: shape.id,
+          type: shape.type,
+          props: {
+            text: html,
+          },
+        });
+      }
+    };
+
     return (
       <HTMLContainer
         className={cn(
@@ -154,6 +167,25 @@ export class InputShapeUtil extends ShapeUtil<TlInputShape> {
             >
               <Play className="w-4 h-4" />
             </TldrawUiButton>
+          </div>
+        </div>
+        <div
+          draggable={false}
+          onPointerDown={(e) => {
+            e.stopPropagation();
+          }}
+          className="w-full p-2 flex-grow overflow-hidden text-sm"
+        >
+          <div
+            style={{ pointerEvents: "all", cursor: "text", height: "100%" }}
+            className="relative p-2"
+          >
+            <TipTap
+              content={shape.props.text}
+              onContentChange={handleContentUpdate}
+              placeholder="type your text here"
+              disabled={isLocked}
+            />
           </div>
         </div>
       </HTMLContainer>
