@@ -6,6 +6,7 @@ import { Controls } from "./Controls";
 import Link from "next/link";
 import { Button } from "./ui/button";
 import { ArrowLeftIcon } from "lucide-react";
+import { GlobalHotkeys } from "./Hotkeys";
 
 export const TldrawContent = () => {
   const { Canvas } = useEditorComponents();
@@ -13,9 +14,10 @@ export const TldrawContent = () => {
     <>
       {Canvas ? <Canvas /> : null}
       <Controls />
+      <GlobalHotkeys />
       <div className="absolute top-0 left-0">
         <Link href={"/"}>
-          <Button>
+          <Button variant={"ghost"} size={"icon"}>
             <ArrowLeftIcon />
           </Button>
         </Link>
