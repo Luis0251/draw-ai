@@ -11,11 +11,10 @@ import {
   resizeBox,
   ShapeUtil,
   T,
-  TLArrowBinding,
-  TLBinding,
   TldrawUiButton,
   TLResizeInfo,
 } from "tldraw";
+import { filterTerminals, getShapeFromBindigs } from "../../shared";
 
 export class InputShapeUtil extends ShapeUtil<TlInputShape> {
   static type = "input" as const;
@@ -51,25 +50,6 @@ export class InputShapeUtil extends ShapeUtil<TlInputShape> {
       });
     };
 
-    const filterTerminals = (
-      bindings: TLBinding[],
-      terminalType: "start" | "end"
-    ): TLArrowBinding[] => {
-      return bindings.filter((binding): binding is TLArrowBinding => {
-        return (
-          binding.props &&
-          "terminal" in binding.props &&
-          binding.props.terminal === terminalType
-        );
-      });
-    };
-
-    const getShapeFromBindigs = (bindings: TLBinding[]): TlInputShape[] => {
-      return bindings.map((binding) => {
-        return this.editor.getShape(binding.toId);
-      }) as TlInputShape[];
-    };
-
     const handleInstruction = async (shape: TlInputShape) => {
       const arrowBindings = this.editor.getBindingsInvolvingShape(
         shape.id,
@@ -83,8 +63,14 @@ export class InputShapeUtil extends ShapeUtil<TlInputShape> {
       const startTerminals = filterTerminals(allArrowBindings, "start");
       const endTerminals = filterTerminals(allArrowBindings, "end");
 
-      const startShapes = getShapeFromBindigs(startTerminals);
-      const endShapes = getShapeFromBindigs(endTerminals);
+      const startShapes = getShapeFromBindigs(
+        startTerminals,
+        this.editor
+      ) as TlInputShape[];
+      const endShapes = getShapeFromBindigs(
+        endTerminals,
+        this.editor
+      ) as TlInputShape[];
 
       if (startShapes.length === 0 || endShapes.length === 0) return;
 
