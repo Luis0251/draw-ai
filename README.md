@@ -62,6 +62,7 @@ cp .env.example .env.local
 | `G`   | Formas     | Insertar formas geométricas |
 
 ✉️ Contacto
+
 Autor: Luis Quesada
 Email: luisdevcol@gmail.com
 
