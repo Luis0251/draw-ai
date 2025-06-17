@@ -34,9 +34,8 @@ export async function generateAIImage(prompt: string) {
             throw new Error(`Error en la API: ${response.status} ${response.statusText} -  ${JSON.stringify(errorResponse)}`);
         }
         const responseData = await response.json();
-        if(responseData.artifacts && responseData.artifacts.length > 0) {
-            const imageBase64 = responseData.artifacts[0].base64;
-            return Buffer.from(imageBase64, "base64");
+      if(responseData.artifacts && responseData.artifacts.length > 0) {
+          return responseData.artifacts[0].base64;
         } else {
             throw new Error("Error al generar la imagen. Por favor, inténtalo de nuevo.");
         }

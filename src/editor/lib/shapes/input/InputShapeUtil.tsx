@@ -63,14 +63,8 @@ export class InputShapeUtil extends ShapeUtil<TlInputShape> {
       const startTerminals = filterTerminals(allArrowBindings, "start");
       const endTerminals = filterTerminals(allArrowBindings, "end");
 
-      const startShapes = getShapeFromBindigs(
-        startTerminals,
-        this.editor
-      ) as TlInputShape[];
-      const endShapes = getShapeFromBindigs(
-        endTerminals,
-        this.editor
-      ) as TlInputShape[];
+      const startShapes = getShapeFromBindigs(startTerminals, this.editor);
+      const endShapes = getShapeFromBindigs(endTerminals, this.editor);
 
       if (startShapes.length === 0 || endShapes.length === 0) return;
 

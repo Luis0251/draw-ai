@@ -2,10 +2,15 @@
 import React from "react";
 import { Tldraw, TldrawEditorProps } from "tldraw";
 import { TldrawContent } from "./TldrawContent";
-import { InputShapeUtil, InputTool } from "@/editor/lib";
+import {
+  InputShapeUtil,
+  InputTool,
+  ImageTool,
+  ImageShapeUtil,
+} from "@/editor/lib";
 
-const myCustomShapes = [InputShapeUtil];
-const myCustomTools = [InputTool];
+const myCustomShapes = [InputShapeUtil, ImageShapeUtil];
+const myCustomTools = [InputTool, ImageTool];
 
 export const Canvas = () => {
   const defaultProps: TldrawEditorProps = {
@@ -20,8 +25,7 @@ export const Canvas = () => {
   };
   return (
     <Tldraw
-      hideUi
-      //persistenceKey="tldraw-canvas"
+      hideUi //persistenceKey="tldraw-canvas"
       {...defaultProps}
     >
       <TldrawContent />

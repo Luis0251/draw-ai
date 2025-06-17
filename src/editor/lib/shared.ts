@@ -1,6 +1,6 @@
 import { Editor, TLArrowBinding, TLBinding } from "tldraw";
 import { TlInputShape } from "../schema/TlInput";
-import { TLImageShape } from "../schema/TLImage";
+
 
 export const filterTerminals = (
       bindings: TLBinding[],
@@ -15,8 +15,8 @@ export const filterTerminals = (
       });
     };
 
-   export  const getShapeFromBindigs = (bindings: TLBinding[], editor:Editor): TlInputShape[] | TLImageShape[]  => {
+   export  const getShapeFromBindigs = (bindings: TLBinding[], editor:Editor): TlInputShape[]   => {
       return bindings.map((binding) => {
         return editor.getShape(binding.toId);
-      }) as TlInputShape[] | TLImageShape[];
+      }) as TlInputShape[] 
     };
