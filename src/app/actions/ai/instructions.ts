@@ -39,9 +39,9 @@ export async function generateResponse(inputs: ShapeInfo[]) {
     console.error("Error with Gemini API:", error);
     
  
-    if (error.message.includes('404')) {
+    if ((error as Error).message.includes('404')) {
       throw new Error("Error de configuración con el servicio de IA. Por favor, contacta al soporte.");
-    } else if (error.message.includes('Quota')) {
+    } else if ((error as Error).message.includes('Quota')) {
       throw new Error("Hemos excedido el límite de solicitudes. Intenta nuevamente en un minuto.");
     } else {
       throw new Error("Error al generar la respuesta. Por favor, inténtalo de nuevo.");
