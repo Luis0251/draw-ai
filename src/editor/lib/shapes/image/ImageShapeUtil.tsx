@@ -11,7 +11,6 @@ import {
   TLResizeInfo,
 } from "tldraw";
 import { filterTerminals, getShapeFromBindigs } from "../../shared";
-import { generateAIImage } from "@/app/actions/ai/image";
 import { cn } from "@/lib/utils";
 import { Lock, LockOpen, WandIcon } from "lucide-react";
 
@@ -73,12 +72,15 @@ export class ImageShapeUtil extends ShapeUtil<TLImageShape> {
         shape.id,
         "arrow"
       );
+
       const arrowShapes = arrowBindings.map((b) =>
         this.editor.getBindingsFromShape(b.fromId, "arrow")
       );
       const allArrowBindings = arrowShapes.flat();
+
       const startTerminals = filterTerminals(allArrowBindings, "start");
       const endTerminals = filterTerminals(allArrowBindings, "end");
+
       const startShapes = getShapeFromBindigs(startTerminals, this.editor);
       const endShapes = getShapeFromBindigs(endTerminals, this.editor);
 
@@ -98,17 +100,40 @@ export class ImageShapeUtil extends ShapeUtil<TLImageShape> {
           prompt,
         },
       });
-      const base64Data = await generateAIImage(prompt);
-      const imageUrl = `data:image/png;base64,${base64Data}`;
 
-      this.editor.updateShape({
-        id: shape.id,
-        type: shape.type,
-        props: {
-          ...shape.props,
-          imageUrl,
-        },
-      });
+      try {
+        const response = await fetch("/api/generate-image", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ prompt }),
+        });
+
+        const data = await response.json();
+
+        if (!response.ok || !data.base64) {
+          console.error(
+            "Error generando imagen:",
+            data?.error || response.statusText
+          );
+          return;
+        }
+
+        const imageUrl = `data:image/png;base64,${data.base64}`;
+
+        // Actualiza la forma con la imagen generada
+        this.editor.updateShape({
+          id: shape.id,
+          type: shape.type,
+          props: {
+            ...shape.props,
+            imageUrl,
+          },
+        });
+      } catch (error) {
+        console.error("Error al generar imagen:", error);
+      }
     };
     return (
       <HTMLContainer
