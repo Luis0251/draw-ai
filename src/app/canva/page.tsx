@@ -1,10 +1,10 @@
-import { Canvas } from "@/components/Canvas";
+import DynamicCanvas from "@/components/DynamicCanvas";
 import React from "react";
 
-export const Page = () => {
+export default function Page() {
   return (
     <main className="fixed inset-0">
-      <Canvas />
+      <DynamicCanvas />
     </main>
   );
-};
+}

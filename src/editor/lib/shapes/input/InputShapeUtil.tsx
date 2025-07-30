@@ -72,25 +72,29 @@ export class InputShapeUtil extends ShapeUtil<TlInputShape> {
         text: shape.props.text,
       }));
 
-      const res = await fetch("/api/generate-response", {
-        method: "POST",
-        body: JSON.stringify(shapeInfo),
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
-
-      const response = await res.json();
-
-      endShapes.forEach((endShape) => {
-        this.editor.updateShape({
-          id: endShape.id,
-          type: endShape.type,
-          props: {
-            text: response,
+      try {
+        const res = await fetch("/api/generate-response", {
+          method: "POST",
+          body: JSON.stringify(shapeInfo),
+          headers: {
+            "Content-Type": "application/json",
           },
         });
-      });
+
+        const response = await res.json();
+
+        endShapes.forEach((endShape) => {
+          this.editor.updateShape({
+            id: endShape.id,
+            type: endShape.type,
+            props: {
+              text: response,
+            },
+          });
+        });
+      } catch (error) {
+        console.error("Error generating response:", error);
+      }
     };
 
     const handleContentUpdate = (html: string) => {
