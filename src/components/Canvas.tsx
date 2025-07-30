@@ -2,12 +2,8 @@
 import React from "react";
 import { Tldraw, TldrawEditorProps } from "tldraw";
 import { TldrawContent } from "./TldrawContent";
-import {
-  InputShapeUtil,
-  InputTool,
-  ImageTool,
-  ImageShapeUtil,
-} from "@/editor/lib";
+import { InputShapeUtil, ImageShapeUtil } from "@/editor/lib";
+import { InputTool, ImageTool } from "@/editor/lib/clientTools";
 
 const myCustomShapes = [InputShapeUtil, ImageShapeUtil];
 const myCustomTools = [InputTool, ImageTool];
