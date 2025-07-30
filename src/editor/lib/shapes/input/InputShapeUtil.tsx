@@ -1,4 +1,3 @@
-import { generateResponse } from "@/app/actions/ai/instructions";
 import { TipTap } from "@/components/TipTap";
 import { TlInputProps, TlInputShape } from "@/editor/schema/TlInput";
 import { cn } from "@/lib/utils";
@@ -73,7 +72,15 @@ export class InputShapeUtil extends ShapeUtil<TlInputShape> {
         text: shape.props.text,
       }));
 
-      const response = await generateResponse(shapeInfo);
+      const res = await fetch("/api/generate-response", {
+        method: "POST",
+        body: JSON.stringify(shapeInfo),
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+
+      const response = await res.json();
 
       endShapes.forEach((endShape) => {
         this.editor.updateShape({
